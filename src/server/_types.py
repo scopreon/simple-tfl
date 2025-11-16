@@ -9,8 +9,8 @@ class TrainArrival(BaseModel):
 
 class TrainTimeRequest(BaseModel):
     station: str
-    destination: str
     line: str
+    destination: str | None
 
 
 class TrainTimeResponse(BaseModel):
