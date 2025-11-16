@@ -150,3 +150,21 @@ def test_decorator_preserves_function_metadata() -> None:
 
     assert original.__name__ == "original"
     assert original.__doc__ == "docstring"
+
+
+def test_function_caches_with_clear() -> None:
+    counter = 0
+
+    @cache_with_ttl(ttl=1)
+    def f() -> None:
+        nonlocal counter
+        counter += 1
+
+    initial_datetime = datetime.datetime(year=2000, month=7, day=12, hour=15)
+    with freeze_time(initial_datetime):
+        assert counter == 0
+        f()
+        assert counter == 1
+        f.clear_cache()
+        f()
+        assert counter == 2
