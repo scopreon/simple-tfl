@@ -1,6 +1,5 @@
 import json
 import os
-from functools import cache
 from typing import Any, Literal
 
 import requests
@@ -70,15 +69,15 @@ TFL_ENDPOINT = "https://api.tfl.gov.uk"
 Direction = Literal["inbound", "outbound", "all"]
 
 
-async def healthcheck() -> TFLStatus:
+def healthcheck() -> TFLStatus:
     path = "/NetworkStatus"
     r = requests.get(f"{TFL_ENDPOINT}{path}", headers=_HEADERS)
     assert r.status_code == 200
     return TFLStatus.model_validate_json(r.text)
 
 
-@cache
-async def get_id(station_name: str) -> str:
+@cache_with_ttl(ttl=9999999)
+def get_id(station_name: str) -> str:
     params = {
         "query": f"{station_name.title()} Underground Station",
         "modes": "tube",
@@ -93,7 +92,7 @@ async def get_id(station_name: str) -> str:
 
 
 @cache_with_ttl(ttl=2)
-async def get_arrivals(
+def get_arrivals(
     station_name: str,
     line: str,
     direction: Direction = "all",
@@ -103,9 +102,9 @@ async def get_arrivals(
         "direction": direction,
     }
     if destination_station is not None:
-        params["destinationStationId"] = await get_id(destination_station)
+        params["destinationStationId"] = get_id(destination_station)
 
-    station_id = await get_id(station_name)
+    station_id = get_id(station_name)
     path = f"/Line/{line}/Arrivals/{station_id}"
     r = requests.get(f"{TFL_ENDPOINT}{path}", params=params, headers=_HEADERS)
     assert r.status_code == 200
