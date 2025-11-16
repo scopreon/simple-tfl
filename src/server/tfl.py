@@ -1,12 +1,23 @@
 import json
+import os
 from functools import cache
 from typing import Any, Literal
 
 import requests
+from dotenv import load_dotenv
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 
 from ._types import TrainArrival
 from .cache import cache_with_ttl
+
+
+load_dotenv()
+
+
+_HEADERS = {
+    "Cache-Control": "no-cache",
+    "app_key": os.getenv("TFL_PRIVATE"),
+}
 
 
 class _TFLTiming(BaseModel):
@@ -61,21 +72,20 @@ Direction = Literal["inbound", "outbound", "all"]
 
 async def healthcheck() -> TFLStatus:
     path = "/NetworkStatus"
-    r = requests.get(f"{TFL_ENDPOINT}{path}")
+    r = requests.get(f"{TFL_ENDPOINT}{path}", headers=_HEADERS)
     assert r.status_code == 200
     return TFLStatus.model_validate_json(r.text)
 
 
 @cache
 async def get_id(station_name: str) -> str:
-    print(await healthcheck())
     params = {
         "query": f"{station_name.title()} Underground Station",
         "modes": "tube",
     }
     path = "/StopPoint/Search"
     # TODO make requests.get a promise
-    r = requests.get(f"{TFL_ENDPOINT}{path}", params=params)
+    r = requests.get(f"{TFL_ENDPOINT}{path}", params=params, headers=_HEADERS)
     assert r.status_code == 200
     resp: dict[str, Any] = json.loads(r.text)
     assert resp["total"] == 1
@@ -97,7 +107,7 @@ async def get_arrivals(
 
     station_id = await get_id(station_name)
     path = f"/Line/{line}/Arrivals/{station_id}"
-    r = requests.get(f"{TFL_ENDPOINT}{path}", params=params)
+    r = requests.get(f"{TFL_ENDPOINT}{path}", params=params, headers=_HEADERS)
     assert r.status_code == 200
     ret = []
     ta = TypeAdapter(list[_TFLArrival])
