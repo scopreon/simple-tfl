@@ -48,6 +48,8 @@ def cache_with_ttl(*, ttl: float) -> Callable[[Callable[P, T]], Callable[P, T]]:
 
             return ret
 
+        wrapper.clear_cache = _results.clear
+
         return wrapper
 
     return decorator
