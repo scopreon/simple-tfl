@@ -1,6 +1,6 @@
 from functools import cache
 
-from .types import TrainArrival
+from ._types import TrainArrival
 
 
 @cache
