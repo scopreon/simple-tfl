@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 
 from ._types import TrainArrival
-from .cache import cache_with_ttl
+from .cache import aio_cache_with_ttl
 
 
 load_dotenv()
@@ -76,8 +76,8 @@ def healthcheck() -> TFLStatus:
     return TFLStatus.model_validate_json(r.text)
 
 
-@cache_with_ttl(ttl=9999999)
-def get_id(station_name: str) -> str:
+@aio_cache_with_ttl(ttl=9999999)
+async def get_id(station_name: str) -> str:
     params = {
         "query": f"{station_name.title()} Underground Station",
         "modes": "tube",
@@ -91,8 +91,8 @@ def get_id(station_name: str) -> str:
     return resp["matches"][0]["id"]
 
 
-@cache_with_ttl(ttl=2)
-def get_arrivals(
+@aio_cache_with_ttl(ttl=2)
+async def get_arrivals(
     station_name: str,
     line: str,
     direction: Direction = "all",
@@ -102,9 +102,9 @@ def get_arrivals(
         "direction": direction,
     }
     if destination_station is not None:
-        params["destinationStationId"] = get_id(destination_station)
+        params["destinationStationId"] = await get_id(destination_station)
 
-    station_id = get_id(station_name)
+    station_id = await get_id(station_name)
     path = f"/Line/{line}/Arrivals/{station_id}"
     r = requests.get(f"{TFL_ENDPOINT}{path}", params=params, headers=_HEADERS)
     assert r.status_code == 200

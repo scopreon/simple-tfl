@@ -11,7 +11,7 @@ async def echo(websocket: ServerConnection) -> None:
         print("Opened connection")
         try:
             while True:
-                raw_data = get_arrivals("bank", "northern")
+                raw_data = await get_arrivals("bank", "northern")
                 data = [model.model_dump_json() for model in raw_data]
                 await websocket.send("\n".join(data))
                 await asyncio.sleep(2)
