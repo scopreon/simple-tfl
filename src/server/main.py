@@ -1,28 +1,29 @@
 import asyncio
 
-from websockets.asyncio.server import ServerConnection, serve
-from websockets.exceptions import ConnectionClosedOK
+from fastapi import FastAPI, WebSocket
+from starlette.websockets import WebSocketDisconnect
 
 from .tfl import get_arrivals
 
 
-async def echo(websocket: ServerConnection) -> None:
-    async for message in websocket:
-        print("Opened connection")
-        try:
-            while True:
-                raw_data = await get_arrivals("bank", "northern")
-                data = [model.model_dump_json() for model in raw_data]
-                await websocket.send("\n".join(data))
-                await asyncio.sleep(2)
-        except ConnectionClosedOK:
-            print("Closed connection")
+app = FastAPI()
 
 
-async def main() -> None:
-    async with serve(echo, "localhost", 8765) as server:
-        await server.serve_forever()
+@app.websocket("/ws/{station}/{line}")
+async def websocket_endpoint(websocket: WebSocket, station: str, line: str) -> None:
+    await websocket.accept()
+    print("Opened connection")
+    try:
+        while True:
+            raw_data = await get_arrivals(station, line)
+            data = [model.model_dump_json() for model in raw_data]
+            await websocket.send_text("\n".join(data))
+            await asyncio.sleep(2)
+    except WebSocketDisconnect:
+        print("Closed connection")
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    import uvicorn
+
+    uvicorn.run("src.server.main:app", port=8000, reload=True)

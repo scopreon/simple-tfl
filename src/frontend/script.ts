@@ -1,5 +1,5 @@
 // Create WebSocket connection.
-const socket = new WebSocket('ws://localhost:8765');
+const socket = new WebSocket('ws://localhost:8000/ws/bank/northern');
 
 // Connection opened
 socket.addEventListener('open', (event) => {
