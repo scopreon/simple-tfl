@@ -11,10 +11,14 @@ function App() {
   const [state, setState] = useState<TflData[]>([]);
 
   useEffect(() => {
-    const socket = new WebSocket('ws://localhost:8001/ws/bank/northern/outbound');
+    const socket = new WebSocket(
+      'ws://localhost:8001/ws/arrivals/bank/northern/outbound'
+    );
 
-    socket.addEventListener('open', () => {
-      socket.send('Hello Server!');
+    const socket2 = new WebSocket('ws://localhost:8001/ws/status/northern');
+
+    socket2.addEventListener('message', (event) => {
+      console.log(JSON.parse(event.data));
     });
 
     socket.addEventListener('message', (event) => {

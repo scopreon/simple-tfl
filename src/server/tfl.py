@@ -1,12 +1,12 @@
 import json
 import os
-from typing import Any, Literal
+from typing import Any
 
 import requests
 from dotenv import load_dotenv
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 
-from ._types import TrainArrival
+from ._types import Direction, LineStatusResponse, TrainArrival
 from .cache import aio_cache_with_ttl
 
 
@@ -55,6 +55,13 @@ class _TFLArrival(BaseModel):
     timing: _TFLTiming
 
 
+class _TFLLineStatus(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    status: str = Field(alias="statusSeverityDescription")
+    reason: str
+
+
 class TFLStatus(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
@@ -65,8 +72,6 @@ class TFLStatus(BaseModel):
 
 
 TFL_ENDPOINT = "https://api.tfl.gov.uk"
-
-Direction = Literal["inbound", "outbound", "all"]
 
 
 def healthcheck() -> TFLStatus:
@@ -95,9 +100,12 @@ async def get_id(station_name: str) -> str:
 async def get_arrivals(
     station_name: str,
     line: str,
-    direction: Direction = "all",
+    direction: Direction | None = None,
     destination_station: str | None = None,
 ) -> list[TrainArrival]:
+    if direction is None:
+        direction = "all"
+
     params: dict[str, str] = {
         "direction": direction,
     }
@@ -119,3 +127,16 @@ async def get_arrivals(
             )
         )
     return ret
+
+
+@aio_cache_with_ttl(ttl=30)
+async def get_line_status(
+    line: str,
+) -> LineStatusResponse:
+    path = f"/Line/{line}/Status"
+    r = requests.get(f"{TFL_ENDPOINT}{path}", headers=_HEADERS)
+    assert r.status_code == 200
+
+    json_resp = json.loads(r.text)
+    temp = _TFLLineStatus.parse_obj(json_resp[0]["lineStatuses"][0])
+    return LineStatusResponse(status=temp.status, description=temp.reason)
