@@ -39,7 +39,15 @@ class CachedFunction[**P, T_co]:
 
         bound = self._sig.bind(*args, **kwargs)
         bound.apply_defaults()
-        hashed = tuple((name, bound.arguments[name]) for name in self._sig.parameters)
+        hashed = tuple(
+            (
+                name,
+                bound.arguments[name]
+                if name != "kwargs"
+                else tuple((value, key) for value, key in sorted(bound.arguments[name].items())),
+            )
+            for name in self._sig.parameters
+        )
 
         with self._lock:
             entry = self._cache.get(hashed)
@@ -79,7 +87,15 @@ class CachedAsyncFunction[**P, T_co]:
 
         bound = self._sig.bind(*args, **kwargs)
         bound.apply_defaults()
-        hashed = tuple((name, bound.arguments[name]) for name in self._sig.parameters)
+        hashed = tuple(
+            (
+                name,
+                bound.arguments[name]
+                if name != "kwargs"
+                else tuple((value, key) for value, key in sorted(bound.arguments[name].items())),
+            )
+            for name in self._sig.parameters
+        )
 
         with self._lock:
             entry = self._cache.get(hashed)

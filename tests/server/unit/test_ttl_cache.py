@@ -168,3 +168,31 @@ def test_function_caches_with_clear() -> None:
         f.clear_cache()
         f()
         assert counter == 2
+
+
+# Test: functions that accept **kwargs should produce same cache key regardless of kwargs order
+def test_function_kwargs() -> None:
+    counter = 0
+
+    @cache_with_ttl(ttl=10)
+    def f(a: int, **kwargs: int) -> int:
+        nonlocal counter
+        counter += 1
+        # return a deterministic value based on args+kwargs
+        return a + sum(kwargs.values())
+
+    initial_datetime = datetime.datetime(year=2022, month=9, day=9)
+    with freeze_time(initial_datetime):
+        # same kwargs different order -> same cache entry
+        assert f(1, x=2, y=3) == 6
+        assert counter == 1
+        assert f(1, y=3, x=2) == 6
+        assert counter == 1
+
+        # calling again with same combination should not re-run
+        assert f(1, x=2, y=3) == 6
+        assert counter == 1
+
+        # different kwargs leads to new computation
+        assert f(1, x=4, y=3) == 8
+        assert counter == 2

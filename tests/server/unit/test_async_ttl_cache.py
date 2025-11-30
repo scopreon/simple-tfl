@@ -179,3 +179,30 @@ async def test_function_caches_with_clear_async() -> None:
         f.clear_cache()
         await f()
         assert counter == 2
+
+
+@pytest.mark.asyncio
+async def test_function_kwargs_async() -> None:
+    counter = 0
+
+    @aio_cache_with_ttl(ttl=10)
+    async def f(a: int, **kwargs: int) -> int:
+        nonlocal counter
+        counter += 1
+        return a + sum(kwargs.values())
+
+    initial_datetime = datetime.datetime(year=2022, month=9, day=9)
+    with freeze_time(initial_datetime):
+        # same kwargs different order -> same cache entry
+        assert await f(1, x=2, y=3) == 6
+        assert counter == 1
+        assert await f(1, y=3, x=2) == 6
+        assert counter == 1
+
+        # calling again with same combination should not re-run
+        assert await f(1, x=2, y=3) == 6
+        assert counter == 1
+
+        # different kwargs leads to new computation
+        assert await f(1, x=4, y=3) == 8
+        assert counter == 2
