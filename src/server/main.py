@@ -4,6 +4,7 @@ from fastapi import FastAPI, WebSocket
 from starlette.websockets import WebSocketDisconnect
 
 from ._types import Direction
+from .settings import BACKEND_PORT
 from .tfl import get_arrivals, get_line_status
 
 
@@ -46,4 +47,4 @@ async def ws_get_status(
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("src.server.main:app", port=8001, reload=True)
+    uvicorn.run("src.server.main:app", port=BACKEND_PORT, reload=True)

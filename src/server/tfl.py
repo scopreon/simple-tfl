@@ -59,7 +59,7 @@ class _TFLLineStatus(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     status: str = Field(alias="statusSeverityDescription")
-    reason: str
+    reason: str = ""
 
 
 class TFLStatus(BaseModel):
@@ -138,5 +138,5 @@ async def get_line_status(
     assert r.status_code == 200
 
     json_resp = json.loads(r.text)
-    temp = _TFLLineStatus.parse_obj(json_resp[0]["lineStatuses"][0])
+    temp = _TFLLineStatus.model_validate(json_resp[0]["lineStatuses"][0])
     return LineStatusResponse(status=temp.status, description=temp.reason)

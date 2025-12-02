@@ -12,21 +12,6 @@ class TrainArrival(BaseModel):
     via: str
 
 
-class TrainTimeRequest(BaseModel):
-    station: str
-    line: str
-    destination: str | None
-    direction: Direction = "all"
-
-
-class TrainTimeResponse(BaseModel):
-    schedule: list[TrainArrival]
-
-
-class LineStatusRequest(BaseModel):
-    line: str
-
-
 class LineStatusResponse(BaseModel):
     status: str
     description: str
