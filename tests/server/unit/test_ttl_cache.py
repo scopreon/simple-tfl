@@ -2,7 +2,7 @@ import datetime
 
 from freezegun import freeze_time
 
-from src.server.cache import cache_with_ttl
+from src.backend.cache import cache_with_ttl
 
 
 def test_function_caches() -> None:

@@ -21,11 +21,11 @@ function App() {
 
   useEffect(() => {
     const arrivalsSocket = new WebSocket(
-      'ws://localhost:8001/ws/arrivals/bank/northern/outbound'
+      'ws://localhost:8000/ws/arrivals/bank/northern/outbound'
     );
 
     const statusSocket = new WebSocket(
-      'ws://localhost:8001/ws/status/northern'
+      'ws://localhost:8000/ws/status/northern'
     );
 
     statusSocket.addEventListener('message', (event) => {
