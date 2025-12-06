@@ -4,7 +4,7 @@ import inspect
 import pytest
 from freezegun import freeze_time
 
-from src.server.cache import aio_cache_with_ttl
+from src.backend.cache import aio_cache_with_ttl
 
 
 @pytest.mark.asyncio

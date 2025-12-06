@@ -47,4 +47,4 @@ async def ws_get_status(
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("src.server.main:app", port=BACKEND_PORT, reload=True)
+    uvicorn.run("src.backend.main:app", port=BACKEND_PORT, reload=True, host="0.0.0.0")
