@@ -9,6 +9,8 @@ ADD https://astral.sh/uv/install.sh /uv-installer.sh
 # Run the installer then remove it
 RUN sh /uv-installer.sh && rm /uv-installer.sh
 
+RUN cp /root/.local/bin/uv /usr/local/bin/uv && chmod 0755 /usr/local/bin/uv
+
 # Ensure the installed binary is on the `PATH`
 ENV PATH="/root/.local/bin/:$PATH"
 ENV UV_PYTHON=/usr/local/bin/python3.13
@@ -25,6 +27,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 ENV BACKEND_PORT=8000
 EXPOSE 8000/tcp
 
+RUN adduser --disabled-password --disabled-login myuser && chown -R myuser /app
+USER myuser
 
 CMD uv run python \
     -m src.backend.main
