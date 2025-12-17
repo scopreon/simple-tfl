@@ -9,10 +9,10 @@ services:
       - appnet
     healthcheck:
       test: curl --fail http://localhost:8000/health || exit 1
-      interval: 2s
+      interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 10s
 
   frontend:
     build:
