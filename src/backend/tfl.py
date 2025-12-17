@@ -115,7 +115,6 @@ async def get_arrivals(
     station_id = await get_id(station_name)
     path = f"/Line/{line}/Arrivals/{station_id}"
     r = requests.get(f"{TFL_ENDPOINT}{path}", params=params, headers=_HEADERS)
-    print(r.url)
     assert r.status_code == 200
     ret = []
     ta = TypeAdapter(list[_TFLArrival])
