@@ -1,12 +1,16 @@
 import asyncio
+import logging
 
 from fastapi import FastAPI, WebSocket
 from starlette.websockets import WebSocketDisconnect
 
 from ._types import Direction
+from .logging import LOGGING_CONFIG
 from .settings import BACKEND_PORT
 from .tfl import get_arrivals, get_line_status
 
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
@@ -22,7 +26,7 @@ async def ws_get_arrivals(
     websocket: WebSocket, station: str, line: str, direction: Direction | None = None
 ) -> None:
     await websocket.accept()
-    print("Opened connection")
+    logger.info("Opened connection")
     try:
         while True:
             raw_data = await get_arrivals(station, line, direction)
@@ -30,7 +34,7 @@ async def ws_get_arrivals(
             await websocket.send_text("\n".join(data))
             await asyncio.sleep(2)
     except WebSocketDisconnect:
-        print("Closed connection")
+        logger.info("Closed connection")
 
 
 @app.websocket("/ws/status/{line}")
@@ -39,17 +43,23 @@ async def ws_get_status(
     line: str,
 ) -> None:
     await websocket.accept()
-    print("Opened connection")
+    logger.info("Opened connection")
     try:
         while True:
             raw_data = await get_line_status(line)
             await websocket.send_text(raw_data.model_dump_json())
             await asyncio.sleep(2)
     except WebSocketDisconnect:
-        print("Closed connection")
+        logger.info("Closed connection")
 
 
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("src.backend.main:app", port=BACKEND_PORT, reload=True, host="0.0.0.0")
+    uvicorn.run(
+        "src.backend.main:app",
+        port=BACKEND_PORT,
+        reload=True,
+        host="0.0.0.0",
+        log_config=LOGGING_CONFIG,
+    )
