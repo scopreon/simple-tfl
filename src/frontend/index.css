@@ -20,3 +20,29 @@ body {
   /* min-width: 320px; */
   /* min-height: 100vh; */
 }
+
+
+nav {
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+nav a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #333;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+nav a:hover {
+  background: #e7e7e7;
+}
+
+nav a.active {
+  background: #333;
+  color: white;
+}

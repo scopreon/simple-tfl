@@ -12,11 +12,11 @@ interface LineData {
   description: string;
 }
 
-function App() {
+export function App() {
   const [arrivals, setArrivals] = useState<TflData[]>([]);
   const [lineInfo, setLineInfo] = useState<LineData>({
-    status: 'NULL',
-    description: 'NULL',
+    status: 'LOADING',
+    description: 'LOADING',
   });
 
   useEffect(() => {
@@ -73,5 +73,3 @@ function App() {
     </>
   );
 }
-
-export default App;
