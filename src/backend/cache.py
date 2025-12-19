@@ -44,7 +44,9 @@ class CachedFunction[**P, T_co]:
                 name,
                 bound.arguments[name]
                 if name != "kwargs"
-                else tuple((value, key) for value, key in sorted(bound.arguments[name].items())),
+                else tuple(
+                    (value, key) for value, key in sorted(bound.arguments[name].items())
+                ),
             )
             for name in self._sig.parameters
         )
@@ -92,7 +94,9 @@ class CachedAsyncFunction[**P, T_co]:
                 name,
                 bound.arguments[name]
                 if name != "kwargs"
-                else tuple((value, key) for value, key in sorted(bound.arguments[name].items())),
+                else tuple(
+                    (value, key) for value, key in sorted(bound.arguments[name].items())
+                ),
             )
             for name in self._sig.parameters
         )
@@ -113,7 +117,9 @@ class CachedAsyncFunction[**P, T_co]:
         return result
 
 
-def cache_with_ttl(*, ttl: float) -> Callable[[Callable[P, T_co]], CachedFunction[P, T_co]]:
+def cache_with_ttl(
+    *, ttl: float
+) -> Callable[[Callable[P, T_co]], CachedFunction[P, T_co]]:
     def decorator(f: Callable[P, T_co]) -> CachedFunction[P, T_co]:
         return CachedFunction(f, ttl)
 

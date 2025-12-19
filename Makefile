@@ -1,4 +1,4 @@
-.PHONY: lint fmt test
+.PHONY: lint fmt test add-pre-commit
 
 lint:
 	uv run ruff check .
@@ -10,3 +10,6 @@ format:
 	
 test:
 	uv run pytest -q
+
+add-pre-commit:
+	uv run pre-commit install

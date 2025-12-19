@@ -170,7 +170,8 @@ def test_function_caches_with_clear() -> None:
         assert counter == 2
 
 
-# Test: functions that accept **kwargs should produce same cache key regardless of kwargs order
+# Test: functions that accept **kwargs should produce same cache key regardless of kwargs
+# order
 def test_function_kwargs() -> None:
     counter = 0
 

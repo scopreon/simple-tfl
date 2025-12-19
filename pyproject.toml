@@ -9,6 +9,7 @@ dependencies = [
     "fastapi>=0.123.5",
     "freezegun>=1.5.5",
     "mypy>=1.19.0",
+    "pre-commit>=4.5.1",
     "pydantic>=2.12.5",
     "pytest>=9.0.2",
     "pytest-asyncio>=1.3.0",
@@ -36,9 +37,8 @@ lint.select = [
 # (ANN401 = "Any should not be used")
 lint.unfixable = ["ANN401"]
 
-line-length = 100
+line-length = 89
 target-version = "py313"
-fix = true
 
 
 [tool.ruff.format]
