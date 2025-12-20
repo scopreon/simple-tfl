@@ -1,4 +1,4 @@
-.PHONY: lint fmt test add-pre-commit
+.PHONY: lint fmt test add-pre-commit uv-export
 
 lint:
 	uv run ruff check .
@@ -13,3 +13,6 @@ test:
 
 add-pre-commit:
 	uv run pre-commit install
+
+uv-export:
+	uv export --format requirements.txt > ./requirements.txt
