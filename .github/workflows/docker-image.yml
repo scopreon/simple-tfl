@@ -15,7 +15,7 @@ jobs:
         run: |
           docker compose pull || true
           docker compose build
-          docker compose up -d --remove-orphans
+          docker compose up -d --remove-orphans frontend backend
 
       - name: Prune unused docker data
         run: docker system prune -f

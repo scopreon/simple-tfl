@@ -1,5 +1,6 @@
 services:
   backend:
+    restart: always
     build:
       context: .
       dockerfile: ./src/backend/Dockerfile
@@ -15,6 +16,7 @@ services:
       start_period: 10s
 
   frontend:
+    restart: always
     build:
       context: .
       dockerfile: ./src/frontend/Dockerfile
