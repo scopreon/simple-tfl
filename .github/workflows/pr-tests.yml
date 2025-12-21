@@ -1,0 +1,20 @@
+name: Test on PR creation
+
+on:
+  push:
+    branches: ["**"]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build and test
+        run: |
+          docker compose pull || true
+          docker compose run test
+
+      - name: Prune unused docker data
+        run: docker system prune -f
