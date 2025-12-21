@@ -6,7 +6,7 @@ on:
     branches: ["**"]
 
 jobs:
-  deploy:
+  test:
     runs-on: self-hosted
     steps:
       - name: Checkout repository
