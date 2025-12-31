@@ -1,0 +1,57 @@
+.page-title {
+  margin-bottom: 1.5rem;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.project-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.25rem;
+  background-color: #fff;
+  color: #555;
+}
+
+.project-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.project-sub-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.project-description {
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.project-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.project-link:hover {
+  text-decoration: underline;
+}
+
+.project-references {
+  margin-top: 0.5rem;
+}
+
+.project-ref-link {
+  font-size: 0.9rem;
+  color: #2563eb;
+  text-decoration: none;
+  margin-right: 0.75rem;
+}
+
+.project-ref-link:hover {
+  text-decoration: underline;
+}
