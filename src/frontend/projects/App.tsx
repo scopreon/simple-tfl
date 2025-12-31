@@ -47,8 +47,8 @@ const projects: Project[] = [
     name: 'Dockerised React Website',
     description:
       'Production-ready React website containerised with Docker and backed by a CI/CD \
-      pipeline using GitHub Actions on a self-hosted runner. CI executes automated tests, \
-      with manual deployment gates enforced on merge.',
+      pipeline using GitHub Actions on a self-hosted runner. CI executes automated tests \
+      and deployment on merge with main.',
     github: 'https://github.com/scopreon/saul.sh',
   },
 ];
