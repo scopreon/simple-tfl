@@ -16,7 +16,8 @@ const projects: Project[] = [
     description:
       'Rust reimplementation of the C++ tool Bear for generating compilation databases \
       by intercepting Linux build processes. Uses LD_PRELOAD to hook syscalls and a \
-      custom Unix Domain Socket server with Protobuf for the data layer.',
+      custom Unix Domain Socket server with Protobuf for the data layer. DISCLAIMER: \
+      THIS WAS BEFORE THEY DID THE FULL RUST REWRITE THEMSELVES',
     github: 'https://github.com/scopreon/rust-bear',
     references: [
       {
@@ -28,8 +29,8 @@ const projects: Project[] = [
   {
     name: 'TFL times',
     description:
-      'I realised I would often arrive at Bank station to early for my train have have to \
-      wait 10+ minutes. React frontend listening on Python server with websockets. Built \
+      'I realised I would often arrive at Bank station too early for my train and have \
+      to wait 10+ minutes. React frontend listening on Python server with websockets. Built \
       fully custom typed asyncio TTL caching infrastructure with full suite of tests.',
     github: 'https://github.com/scopreon/saul.sh',
     references: [
