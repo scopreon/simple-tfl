@@ -1,8 +1,12 @@
+import Canvas from './canvas';
+
 export function App() {
   return (
     <>
       <h1>Welcome!!!</h1>
-      <body> More coming here soon...</body>
+      <p> WebGL Mandelbrot (drag and scroll to zoom)</p>
+      <br></br>
+      <Canvas width={500} height={500} />
     </>
   );
 }
