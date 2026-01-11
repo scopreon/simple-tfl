@@ -148,7 +148,7 @@ function drawScene(
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   const fieldOfView = (45 * Math.PI) / 180;
-  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  const aspect = gl.canvas.width / gl.canvas.height;
   const projectionMatrix = mat4.create();
   mat4.perspective(projectionMatrix, fieldOfView, aspect, 0.1, 100.0);
 
