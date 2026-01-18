@@ -39,10 +39,8 @@ vec3 hsv2rgb(vec3 c) {
 
 void main() {
     vec2 st = gl_FragCoord.xy / u_resolution;
+    st -= vec2(0.5, 0.5);
     st.x *= u_resolution.x / u_resolution.y;
-
-    // Zoom & offset
-    st -= 0.5;
     st /= u_zoom;
     st += u_offset;
 
@@ -59,13 +57,17 @@ void main() {
           break;
         }
     }
-    float t = float(rate) / 256.0;   // normalize iterations
-    float hue = t;                  // hue ∈ [0,1)
-    float saturation = 1.0;
-    float value = rate == 0 ? 0.0 : 1.0;  // inside set = black
-
-    vec3 color = hsv2rgb(vec3(hue, saturation, value));
-    gl_FragColor = vec4(color, 1.0);
+    if (rate == 0) {
+        // Inside the set - transparent
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+    } else {
+        // Outside the set - blue with varying shades
+        float t = float(rate) / 256.0;   // normalize iterations
+        vec3 darkBlue = vec3(0.0, 0.1, 0.3);  // dark blue
+        vec3 brightBlue = vec3(0.0, 0.7, 1.0); // bright blue
+        vec3 color = mix(darkBlue, brightBlue, t);  // blend between shades
+        gl_FragColor = vec4(color, 1.0);
+    }
 }
 `;
 
@@ -239,7 +241,7 @@ export default function Canvas({ width, height }: CanvasProps) {
       console.log(e.clientX, rect.left, canvas.width);
 
       // Convert to normalized coordinates [-0.5, 0.5]
-      let nx = mouseX / rect.width - 0.5;
+      let nx = (mouseX / rect.width - 0.5) * (canvas.width / canvas.height);
       let ny = 0.5 - mouseY / rect.height; // flip Y
 
       // // Apply aspect ratio
@@ -284,8 +286,9 @@ export default function Canvas({ width, height }: CanvasProps) {
       if (!isDragging.current) return;
       const dx = (e.clientX - lastMouse.current.x) / canvas.width;
       const dy = (e.clientY - lastMouse.current.y) / canvas.height;
-      offsetRef.current.x -=
-        ((dx * (canvas.width / canvas.height)) / zoomRef.current) * 2;
+      const aspectRatio = canvas.width / canvas.height;
+
+      offsetRef.current.x -= ((dx * aspectRatio) / zoomRef.current) * 2;
       offsetRef.current.y += (dy / zoomRef.current) * 2;
       lastMouse.current = { x: e.clientX, y: e.clientY };
 
