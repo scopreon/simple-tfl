@@ -13,12 +13,29 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+#root {
+  /* max-width: 1280px; */
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
 body {
   margin: 0;
   /* display: flex; */
   place-items: center;
   /* min-width: 320px; */
-  /* min-height: 100vh; */
+  min-height: 100%;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
 }
 
 
