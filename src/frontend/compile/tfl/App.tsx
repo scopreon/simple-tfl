@@ -8,6 +8,8 @@ interface TflData {
 }
 
 interface LineData {
+  station: string;
+  direction: string;
   status: string;
   description: string;
 }
@@ -15,6 +17,8 @@ interface LineData {
 export function App() {
   const [arrivals, setArrivals] = useState<TflData[]>([]);
   const [lineInfo, setLineInfo] = useState<LineData>({
+    station: '-',
+    direction: '-',
     status: 'LOADING',
     description: 'LOADING',
   });
@@ -38,7 +42,12 @@ export function App() {
 
     statusSocket.addEventListener('message', (event) => {
       const data = JSON.parse(event.data);
-      setLineInfo({ status: data.status, description: data.description });
+      setLineInfo({
+        station: start_station,
+        direction: direction,
+        status: data.status,
+        description: data.description,
+      });
     });
 
     arrivalsSocket.addEventListener('message', (event) => {
@@ -70,6 +79,9 @@ export function App() {
   return (
     <>
       <div>
+        <p>
+          Currently showing {lineInfo.station} {lineInfo.direction}
+        </p>
         <span>{lineInfo.status}</span>
         <p>{lineInfo.description}</p>
       </div>
