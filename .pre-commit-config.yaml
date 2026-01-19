@@ -1,22 +1,22 @@
 repos:
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.14.10
-  hooks:
-    - id: ruff-check
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.10
+    hooks:
+      - id: ruff-check
 
-- repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.19.0
-  hooks:
-    - id: mypy
-      additional_dependencies: [
-        pydantic,
-        fastapi,
-        starlette,
-        uvicorn,
-        python-dotenv,
-        requests,
-        types-requests,
-        freezegun,
-        pytest,
-      ]
-
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.19.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          [
+            pydantic,
+            fastapi,
+            starlette,
+            uvicorn,
+            python-dotenv,
+            requests,
+            types-requests,
+            freezegun,
+            pytest,
+          ]

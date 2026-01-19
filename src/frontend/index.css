@@ -28,7 +28,9 @@ body {
   min-height: 100%;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
 }
@@ -37,7 +39,6 @@ html, body, #root {
   display: flex;
   flex-direction: column;
 }
-
 
 nav {
   gap: 1.5rem;
