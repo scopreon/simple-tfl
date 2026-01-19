@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: ./src/frontend/Dockerfile
       args:
-        NGINX_ENV: "prod"
+        NGINX_ENV: 'prod'
     ports:
       - 80:80
       - 443:443
@@ -33,14 +33,14 @@ services:
     depends_on:
       backend:
         condition: service_healthy
-  
+
   test:
     build:
       context: .
       dockerfile: ./src/backend/Dockerfile
     volumes:
-     - ./src:/app/src:ro
-     - ./tests:/app/tests:ro
+      - ./src:/app/src:ro
+      - ./tests:/app/tests:ro
     command: uv run pytest tests
 
 networks:

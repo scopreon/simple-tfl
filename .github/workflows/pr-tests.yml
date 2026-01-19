@@ -3,7 +3,7 @@ name: Test on PR creation
 on:
   pull_request:
   push:
-    branches: ["**"]
+    branches: ['**']
 
 jobs:
   test:
