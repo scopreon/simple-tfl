@@ -1,7 +1,7 @@
 export function App() {
   return (
     <iframe
-      src={`${import.meta.env.BASE_URL}cv/Saul_Cooperman_CV.pdf`}
+      src={`/api/cv`}
       style={{ flex: 1, width: '100%', border: 'none' }}
       title="CV"
     />
