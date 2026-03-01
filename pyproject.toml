@@ -8,6 +8,7 @@ dependencies = [
     "dotenv>=0.9.9",
     "fastapi>=0.123.5",
     "freezegun>=1.5.5",
+    "httpx>=0.28.1",
     "mypy>=1.19.0",
     "pre-commit>=4.5.1",
     "pydantic>=2.12.5",
