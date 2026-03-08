@@ -12,6 +12,21 @@ type Project = {
 
 const projects: Project[] = [
   {
+    name: 'forkache',
+    description:
+      'A simple cache invalidation library for Python that automatically clears cached \
+      values when your process forks. Solves the subtle bug where child processes inherit \
+      stale cached data from the parent. Works with functools, cachetools, and any caching \
+      library with a standard clear method.',
+    github: 'https://github.com/scopreon/forkache',
+    references: [
+      {
+        label: 'PyPI',
+        href: 'https://pypi.org/project/forkache/',
+      },
+    ],
+  },
+  {
     name: 'Generic Compilation Database Generator',
     description:
       'Rust reimplementation of the C++ tool Bear for generating compilation databases \
